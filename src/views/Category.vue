@@ -72,27 +72,47 @@
                         </div>
                         <div class="card-body">
                             <div class="row icon-examples">
-                                <draggable v-model="exampleList" class="bigger-area">
-                                    <transition-group name="list-complete">
-                                        <div v-for="text in exampleList" :key="text" :move="checkMove" class="drag-item flex flex-justify-betweeen" @dragend="checkMove">{{ text }}</div>
-                                    </transition-group>
-                                </draggable>
-                               <!-- <div class="col-lg-3 col-md-6" v-for="(icon, index) in icons" :key="icon.name + index">
-                                    <button type="button"
-                                            v-b-tooltip.hover.top
-                                            :title="icon.name"
-                                            v-clipboard:copy="icon.name"
-                                            v-clipboard:success="onCopy"
-                                            class="btn-icon-clipboard" data-clipboard-text="air-baloon">
-                                        <div>
-                                            <i :class="icon.name"></i>
-                                            <span>{{icon.name.substring(6)}}</span>
+                                <div class="col-3">
+                                    <Tree :data="tree2data" draggable="draggable" cross-tree="cross-tree">
+                                        <div @dblclick="dblclick" slot-scope="{data, store}">
+                                            <template v-if="!data.isDragPlaceHolder"><b v-if="data.children &amp;&amp; data.children.length" @click="store.toggleOpen(data)">{{data.open ? '-' : '+'}}&nbsp;</b><span>{{data.text}}</span></template>
                                         </div>
-                                    </button>
-                                </div>-->
+                                    </Tree>
+                                    <div class="mt-2">
+                                        <button class="btn btn-primary" @click="add">Add</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="regist_frame" style="position: absolute; width: 400px; background-color: white; border: 1px solid black; padding: 10px; z-index: 2; top: 50%; left: 50%; margin-top: 86.5px; margin-left: -211px;">
+            <div style="float:right;width:10px;margin-top:-5px"><a onclick="">×</a></div>
+            <form id="save_form" name="save_form" onsubmit="return false">
+                <input type="hidden" id="no" name="no" value="">
+                <input type="hidden" id="depth" name="depth" value="">
+                <table width="100%" align="center" cellpadding="5" cellspacing="0" border="1" bordercolor="#dedede" class="table1" style="table-layout:fixed">
+                    <colgroup>
+                        <col width="134">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td class="gray_bg"><img src=""> 카테고리 이름</td>
+                            <td>
+                                <input type="text" id="item" name="item" size="25" maxlength="25" class="simpleform" onkeyup="">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <div style="text-align:center;margin-top:10px">
+                <div class="mt-2">
+                    <button class="btn btn-primary" @click="add">저장</button>
+                    <button class="btn btn-primary" @click="add">창닫기</button>
                 </div>
             </div>
         </div>
@@ -103,211 +123,61 @@
   import Vue from 'vue'
   import VueClipboard from 'vue-clipboard2'
   import BTooltipDirective from 'bootstrap-vue/es/directives/tooltip'
-  import draggable from 'vuedraggable'
+  import {DraggableTree} from 'vue-draggable-nested-tree'
   Vue.use(VueClipboard)
-  Vue.use(draggable)
+  Vue.use(DraggableTree)
   export default {
     directives: {
       'b-tooltip': BTooltipDirective
     },
     data() {
         return {
-            exampleList: ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
+            tree2data: [
+                {text: 'node 1'},
+                {text: 'node 2'},
+                {text: 'node 3'},
+                {text: 'node 4'},
+            ]
         };
     },
       components: {
-          draggable
+          Tree: DraggableTree
       },
     methods: {
-        checkMove: function(e) {
-            window.console.log("Future index: " + this.exampleList);
+        // add child to tree2
+        add() {
+            console.log(this.tree2data);
+            this.tree2data.push({text: 'chi1123123123ld'})
         },
-          onCopy() {
-            this.$notify({
-              type: 'success',
-              title: 'Copied to clipboard'
-            })
-          },
-        log: function(e) {
-            console.log(e);
+        dblclick(el) {
+            console.log(el);
         }
+
     }
   };
 </script>
-<style scoped>
-    .title {
-        margin-bottom: 2em;
+<style>
+    .he-tree{
+        border: 1px solid #ccc;
+        padding: 20px;
     }
-    .bigger-area > span {
-        min-height: 90vh;
-        display: block;
+    .tree-node{
     }
-    .drag-item {
-        padding: 15px 10px;
-        background-color: whitesmoke;
-        min-width: 30vw;
-        max-width: 90vw;
-        margin: 0 auto 10px;
-        cursor: -moz-grab;
-        cursor: -webkit-grab;
-        cursor: grab;
-        transition: transform 0.25s cubic-bezier(0.02, 1.01, 0.94, 1.01);
-        will-change: transform;
+    .tree-node-inner{
+        padding: 5px;
+        border: 1px solid #ccc;
+        cursor: pointer;
     }
-    .list-complete-enter,
-    .list-complete-leave-active {
-        opacity: 0;
+    .draggable-placeholder{
     }
-</style>
-
-<!--
-
-<template>
-    <div>
-        <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
-            &lt;!&ndash; Card stats &ndash;&gt;
-            <div class="row">
-                <div class="col-xl-3 col-lg-6">
-                    <stats-card title="Total traffic"
-                                type="gradient-red"
-                                sub-title="350,897"
-                                icon="ni ni-active-40"
-                                class="mb-4 mb-xl-0"
-                    >
-
-                        <template slot="footer">
-                            <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                            <span class="text-nowrap">Since last month</span>
-                        </template>
-                    </stats-card>
-                </div>
-                <div class="col-xl-3 col-lg-6">
-                    <stats-card title="Total traffic"
-                                type="gradient-orange"
-                                sub-title="2,356"
-                                icon="ni ni-chart-pie-35"
-                                class="mb-4 mb-xl-0"
-                    >
-
-                        <template slot="footer">
-                            <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 12.18%</span>
-                            <span class="text-nowrap">Since last month</span>
-                        </template>
-                    </stats-card>
-                </div>
-                <div class="col-xl-3 col-lg-6">
-                    <stats-card title="Sales"
-                                type="gradient-green"
-                                sub-title="924"
-                                icon="ni ni-money-coins"
-                                class="mb-4 mb-xl-0"
-                    >
-
-                        <template slot="footer">
-                            <span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> 5.72%</span>
-                            <span class="text-nowrap">Since last month</span>
-                        </template>
-                    </stats-card>
-
-                </div>
-                <div class="col-xl-3 col-lg-6">
-                    <stats-card title="Performance"
-                                type="gradient-info"
-                                sub-title="49,65%"
-                                icon="ni ni-chart-bar-32"
-                                class="mb-4 mb-xl-0"
-                    >
-
-                        <template slot="footer">
-                            <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 54.8%</span>
-                            <span class="text-nowrap">Since last month</span>
-                        </template>
-                    </stats-card>
-                </div>
-            </div>
-        </base-header>
-
-        <div class="container-fluid mt&#45;&#45;7">
-            <div class="row">
-                <div class="col">
-                    <div class="card shadow">
-                        <div class="card-header bg-transparent">
-                            <h3 class="mb-0">Category</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row icon-examples">
-                                <template>
-                                    <div class="justify-content-between row">
-                                        <nested-test class="col-8" v-model="elements" />
-                                        <raw-displayer class="col-4" :title="'Vuex Store'" :value="elements" />
-                                    </div>
-                                </template>
-
-
-                                &lt;!&ndash; <div class="col-lg-3 col-md-6" v-for="(icon, index) in icons" :key="icon.name + index">
-                                     <button type="button"
-                                             v-b-tooltip.hover.top
-                                             :title="icon.name"
-                                             v-clipboard:copy="icon.name"
-                                             v-clipboard:success="onCopy"
-                                             class="btn-icon-clipboard" data-clipboard-text="air-baloon">
-                                         <div>
-                                             <i :class="icon.name"></i>
-                                             <span>{{icon.name.substring(6)}}</span>
-                                         </div>
-                                     </button>
-                                 </div>&ndash;&gt;
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</template>
-<script>
-    import NestedTest from "./nested/nested-test.vue";
-    import rawDisplayer from "./infra/raw-displayer.vue";
-    export default {
-        name: "nested-with-vmodel",
-        display: "Nested (v-model & vuex)",
-        order: 16,
-        components: {
-            NestedTest,
-            rawDisplayer
-        },
-        computed: {
-            elements: {
-            }
-        },
-        methods: {}
-    };
-</script>
-<style scoped>
-    .title {
-        margin-bottom: 2em;
-    }
-    .bigger-area > span {
-        min-height: 90vh;
-        display: block;
-    }
-    .drag-item {
-        padding: 15px 10px;
-        background-color: whitesmoke;
-        min-width: 30vw;
-        max-width: 90vw;
-        margin: 0 auto 10px;
-        cursor: -moz-grab;
-        cursor: -webkit-grab;
-        cursor: grab;
-        transition: transform 0.25s cubic-bezier(0.02, 1.01, 0.94, 1.01);
-        will-change: transform;
-    }
-    .list-complete-enter,
-    .list-complete-leave-active {
-        opacity: 0;
+    .draggable-placeholder-inner{
+        border: 1px dashed #0088F8;
+        box-sizing: border-box;
+        background: rgba(0, 136, 249, 0.09);
+        color: #0088f9;
+        text-align: center;
+        padding: 0;
+        display: flex;
+        align-items: center;
     }
 </style>
-
--->

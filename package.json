@@ -19,10 +19,10 @@
     "vue": "2.6.6",
     "vue-chartjs": "3.4.2",
     "vue-clipboard2": "0.3.0",
+    "vue-draggable-nested-tree": "^2.2.17",
     "vue-flatpickr-component": "8.1.2",
     "vue-router": "3.0.1",
-    "vue2-transitions": "0.3.0",
-    "vuedraggable": "^2.23.0"
+    "vue2-transitions": "0.3.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
