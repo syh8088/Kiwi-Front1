@@ -73,9 +73,14 @@
                         <div class="card-body">
                             <div class="row icon-examples">
                                 <div class="col-3">
-                                    <Tree :data="tree2data" draggable="draggable" cross-tree="cross-tree">
-                                        <div @dblclick="dblclick" slot-scope="{data, store}">
-                                            <template v-if="!data.isDragPlaceHolder"><b v-if="data.children &amp;&amp; data.children.length" @click="store.toggleOpen(data)">{{data.open ? '-' : '+'}}&nbsp;</b><span>{{data.text}}</span></template>
+                                    <Tree :data="categoriesData" draggable="draggable" cross-tree="cross-tree">
+                                        <div :data-no="data.categoryNo" :data-name="data.name" :data-hierarchicalOrder="data.hierarchicalOrder" @dblclick="dblclick" slot-scope="{data, store}">
+                                            <template v-if="!data.isDragPlaceHolder">
+                                                <b v-if="data.children &amp;&amp; data.children.length" @click="store.toggleOpen(data)">
+                                                    {{data.open ? '-' : '+'}}&nbsp;
+                                                </b>
+                                                <span>{{data.name}}</span>
+                                            </template>
                                         </div>
                                     </Tree>
                                     <div class="mt-2">
@@ -89,11 +94,11 @@
             </div>
         </div>
 
-        <div id="regist_frame" style="position: absolute; width: 400px; background-color: white; border: 1px solid black; padding: 10px; z-index: 2; top: 50%; left: 50%; margin-top: 86.5px; margin-left: -211px;">
-            <div style="float:right;width:10px;margin-top:-5px"><a onclick="">×</a></div>
+        <div id="regist-frame" style="display: none; position: absolute; width: 400px; background-color: white; border: 1px solid black; padding: 10px; z-index: 2; top: 50%; left: 50%; margin-top: 86.5px; margin-left: -211px;">
+            <!--<div style="float:right;width:10px;margin-top:-5px"><a onclick="">×</a></div>-->
             <form id="save_form" name="save_form" onsubmit="return false">
-                <input type="hidden" id="no" name="no" value="">
-                <input type="hidden" id="depth" name="depth" value="">
+                <input type="hidden" id="categoryNo" name="categoryNo" value="">
+                <input type="hidden" id="hierarchicalOrder" name="hierarchicalOrder" value="">
                 <table width="100%" align="center" cellpadding="5" cellspacing="0" border="1" bordercolor="#dedede" class="table1" style="table-layout:fixed">
                     <colgroup>
                         <col width="134">
@@ -103,7 +108,7 @@
                         <tr>
                             <td class="gray_bg"><img src=""> 카테고리 이름</td>
                             <td>
-                                <input type="text" id="item" name="item" size="25" maxlength="25" class="simpleform" onkeyup="">
+                                <input type="text" id="name" name="name" size="25" maxlength="25" class="simpleform" onkeyup="">
                             </td>
                         </tr>
                     </tbody>
@@ -111,8 +116,8 @@
             </form>
             <div style="text-align:center;margin-top:10px">
                 <div class="mt-2">
-                    <button class="btn btn-primary" @click="add">저장</button>
-                    <button class="btn btn-primary" @click="add">창닫기</button>
+                    <button class="btn btn-primary" @click="save">저장</button>
+                    <button class="btn btn-primary" @click="close">창닫기</button>
                 </div>
             </div>
         </div>
@@ -120,38 +125,127 @@
     </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import VueClipboard from 'vue-clipboard2'
-  import BTooltipDirective from 'bootstrap-vue/es/directives/tooltip'
-  import {DraggableTree} from 'vue-draggable-nested-tree'
-  Vue.use(VueClipboard)
-  Vue.use(DraggableTree)
-  export default {
-    directives: {
-      'b-tooltip': BTooltipDirective
+    import Vue from 'vue'
+    import {DraggableTree} from 'vue-draggable-nested-tree'
+    Vue.use(DraggableTree);
+
+    export default {
+        directives: {
     },
     data() {
         return {
-            tree2data: [
-                {text: 'node 1'},
-                {text: 'node 2'},
-                {text: 'node 3'},
-                {text: 'node 4'},
+            categoriesData: [
+    /*                {categoryNo: 1, name: 'node 1', displayOrder: 1, hierarchicalOrder: 1},
+                {categoryNo: 2, name: 'node 2', displayOrder: 2, hierarchicalOrder: 1},
+                {categoryNo: 3, name: 'node 3', displayOrder: 3, hierarchicalOrder: 1},
+                {categoryNo: 4, name: 'node 4', displayOrder: 4, hierarchicalOrder: 2},
+                {categoryNo: 5, name: 'node 5', displayOrder: 5, hierarchicalOrder: 2},
+                {categoryNo: 6, name: 'node 6', displayOrder: 6, hierarchicalOrder: 2},
+                {categoryNo: 7, name: 'node 7', displayOrder: 7, hierarchicalOrder: 2},
+                {categoryNo: 8, name: 'node 8', displayOrder: 8, hierarchicalOrder: 2},*/
+
+
+                {categoryNo: 3, name: 'node 3', displayOrder: 3, hierarchicalOrder: 1},
+                {categoryNo: 2, name: 'node 2', displayOrder: 2, hierarchicalOrder: 1, children: [
+                        {categoryNo: 9, name: 'node 2_2', displayOrder: 2},
+                        {categoryNo: 10, name: 'node 2_1', displayOrder: 1, children: [
+                                {categoryNo: 11, name: 'node 2_1_2', displayOrder: 2},
+                                {categoryNo: 12, name: 'node 2_1_1', displayOrder: 1},
+                                {categoryNo: 13, name: 'node 2_1_3', displayOrder: 3},
+                                {categoryNo: 14, name: 'node 2_1_4', displayOrder: 4},
+                            ]},
+                    ]},
+                {categoryNo: 1, name: 'node 1', displayOrder: 1, hierarchicalOrder: 1},
+                {categoryNo: 8, name: 'node 8', displayOrder: 8, hierarchicalOrder: 2},
+                {categoryNo: 5, name: 'node 5', displayOrder: 5, hierarchicalOrder: 2},
+                {categoryNo: 4, name: 'node 4', displayOrder: 4, hierarchicalOrder: 2},
+                {categoryNo: 7, name: 'node 7', displayOrder: 7, hierarchicalOrder: 2},
+                {categoryNo: 6, name: 'node 6', displayOrder: 6, hierarchicalOrder: 2},
             ]
         };
     },
-      components: {
-          Tree: DraggableTree
-      },
+    components: {
+      Tree: DraggableTree
+    },
+    mounted() {
+
+    },
+    created() {
+        this.categoriesDataSort(this.categoriesData);
+    },
     methods: {
         // add child to tree2
         add() {
-            console.log(this.tree2data);
-            this.tree2data.push({text: 'chi1123123123ld'})
+            console.log(this.categoriesData);
+
+            this.categoriesData.push({text: 'chi1123123123ld'})
         },
         dblclick(el) {
-            console.log(el);
-        }
+            this.$common.blind().draw();
+
+            let categoryNo = el.currentTarget.getAttribute("data-no");
+            let categoryName = el.currentTarget.getAttribute("data-name");
+            let hierarchicalOrder = el.currentTarget.getAttribute("data-hierarchicalOrder");
+
+            document.getElementById("categoryNo").value = categoryNo;
+            document.getElementById("name").value = categoryName;
+            document.getElementById("hierarchicalOrder").value = hierarchicalOrder;
+
+            document.getElementById("regist-frame").style.display = 'block';
+
+        },
+        save() {
+            let categoryNo = document.getElementById("categoryNo").value;
+            let categoryName = document.getElementById("name").value;
+            let hierarchicalOrder = document.getElementById("hierarchicalOrder").value;
+
+            let k = 0;
+            for (; k < hierarchicalOrder ; k++ ) {
+                //let array = this.categoriesData[].chie
+              //  test();
+            }
+
+       /*     this.categoriesData.forEach((category, index) => {
+                if(category.categoryNo === parseInt(categoryNo)) {
+                    this.categoriesData[index].name = categoryName;
+                }
+            });
+*/
+
+            this.changeCategoryName(this.categoriesData, categoryNo, categoryName);
+
+            console.log(this.categoriesData);
+            this.close();
+        },
+        changeCategoryName(targetArray, targetCategoryNo, targetCategoryName) {
+            targetArray.forEach((category, index) => {
+                if(category.categoryNo === parseInt(targetCategoryNo)) {
+                    targetArray[index].name = targetCategoryName;
+                    return true;
+                }
+                if(targetArray[index].children.length > 0) this.changeCategoryName(targetArray[index].children, targetCategoryNo, targetCategoryName);
+            });
+        },
+        close() {
+            this.$common.blind().remove();
+            document.getElementById("regist-frame").style.display = 'none';
+        },
+        categoriesDataSort(targetArray) {
+            this.categoriesDataSortByDisplayOrder(targetArray);
+            targetArray.forEach((category, index) => {
+                if(targetArray[index].children !== undefined && targetArray[index].children.length > 0) this.categoriesDataSort(targetArray[index].children);
+            });
+        },
+        categoriesDataSortByDisplayOrder(targetArray) {
+
+            if (targetArray === null || targetArray === undefined) {
+                return false;
+            }
+
+            targetArray.sort(function (a, b) {
+                return a.displayOrder < b.displayOrder ? -1 : a.displayOrder > b.displayOrder ? 1 : 0;
+            });
+        },
 
     }
   };

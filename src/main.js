@@ -3,10 +3,12 @@ import App from './App.vue'
 import router from './router'
 import './registerServiceWorker'
 import ArgonDashboard from './plugins/argon-dashboard'
+import Common from './common/Common.js'
 
 Vue.config.productionTip = false
 
 Vue.use(ArgonDashboard)
+Vue.use(Common)
 new Vue({
   router,
   render: h => h(App)
