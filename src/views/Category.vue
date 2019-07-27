@@ -85,6 +85,7 @@
                                     </Tree>
                                     <div class="mt-2">
                                         <button class="btn btn-primary" @click="add">Add</button>
+                                        <button class="btn btn-primary" @click="save">저장</button>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +117,7 @@
             </form>
             <div style="text-align:center;margin-top:10px">
                 <div class="mt-2">
-                    <button class="btn btn-primary" @click="save">저장</button>
+                    <button class="btn btn-primary" @click="nameModify">저장</button>
                     <button class="btn btn-primary" @click="close">창닫기</button>
                 </div>
             </div>
@@ -171,6 +172,21 @@
 
     },
     created() {
+
+        this.$api.getCategories().then(response => {
+            console.log(response);
+            if(response.status === 200 || response.status === 204) {
+                   this.categoriesData = response.data.categoryResponses;
+
+
+            }
+
+        }).catch(e => {
+            console.log(e);
+        });
+
+
+
         this.categoriesDataSort(this.categoriesData);
     },
     methods: {
@@ -194,7 +210,7 @@
             document.getElementById("regist-frame").style.display = 'block';
 
         },
-        save() {
+        nameModify() {
             let categoryNo = document.getElementById("categoryNo").value;
             let categoryName = document.getElementById("name").value;
             let hierarchicalOrder = document.getElementById("hierarchicalOrder").value;
@@ -246,7 +262,43 @@
                 return a.displayOrder < b.displayOrder ? -1 : a.displayOrder > b.displayOrder ? 1 : 0;
             });
         },
+        save() {
 
+            let data = {
+                'categoryRequests': this.categoriesData
+            };
+
+            this.$api.saveCategories(data).then(response => {
+                console.log(response);
+                if(response.status === 200 || response.status === 204) {
+
+                }
+
+            }).catch(e => {
+                console.log(e);
+            });
+/*            {
+                "categoryRequests": [
+                    {
+                        "categoryNo": 0,
+                        "name": "string",
+                        "displayOrder": 0,
+                        "childrenCategoryRequests": [
+                            null
+                        ]
+                    }
+                ],
+                    "removedCategoryNos": [
+                    0
+                ],
+                    "moveCategoryNos": [
+                    {
+                        "destinationCategoryNo": 0,
+                        "previousCategoryNo": 0
+                    }
+                ]
+            }*/
+        }
     }
   };
 </script>
