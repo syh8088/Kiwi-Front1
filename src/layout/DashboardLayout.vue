@@ -16,6 +16,7 @@
 
         <sidebar-item :link="{name: '카테고리', icon: 'ni ni-planet text-blue', path: '/category'}"/>
         <sidebar-item :link="{name: '포스트', icon: 'ni ni-planet text-blue', path: '/post'}"/>
+        <sidebar-item :link="{name: '포스트 글쓰기', icon: 'ni ni-planet text-blue', path: '/postWrite'}"/>
         <sidebar-item :link="{name: 'Icons', icon: 'ni ni-planet text-blue', path: '/icons'}"/>
         <sidebar-item :link="{name: 'Maps', icon: 'ni ni-pin-3 text-orange', path: '/maps'}"/>
         <sidebar-item :link="{name: 'User Profile', icon: 'ni ni-single-02 text-yellow', path: '/profile'}"/>

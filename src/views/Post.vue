@@ -83,15 +83,15 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <base-input alternative=""
-                                                label="Username"
-                                                placeholder="Username"
+                                                label="Category"
+                                                placeholder="Category"
                                                 input-classes="form-control-alternative"
                                     />
                                 </div>
                                 <div class="col-lg-6">
                                     <base-input alternative=""
-                                                label="Email address"
-                                                placeholder="jesse@example.com"
+                                                label="Tag"
+                                                placeholder="Tag"
                                                 input-classes="form-control-alternative"
                                                 v-model="model.username"
                                     />
@@ -100,8 +100,8 @@
 
                         </div>
 
-                        <hr class="my-4" />
-                        <!-- Description -->
+                     <!--   <hr class="my-4" />
+                        &lt;!&ndash; Description &ndash;&gt;
                         <h6 class="heading-small text-muted mb-4">About me</h6>
                         <div class="pl-lg-4">
                             <div class="form-group">
@@ -110,12 +110,14 @@
                                     <textarea rows="4" class="form-control form-control-alternative" placeholder="A few words about you ...">A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea>
                                 </base-input>
                             </div>
-                        </div>
+                        </div>-->
                     </form>
                 </template>
             </card>
         </div>
-
+        <hr class="my-4" />
+        <hr class="my-4" />
+        <hr class="my-4" />
         <div class="container-fluid mt--7">
             <div class="row mt-5">
                 <div class="col">

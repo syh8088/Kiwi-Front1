@@ -31,6 +31,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "demo" */ './views/Post.vue')
         },
         {
+          path: '/postWrite',
+          name: 'postWrite',
+          component: () => import(/* webpackChunkName: "demo" */ './views/PostWrite.vue')
+        },
+        {
           path: '/icons',
           name: 'icons',
           component: () => import(/* webpackChunkName: "demo" */ './views/Icons.vue')
