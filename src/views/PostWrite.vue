@@ -1,217 +1,111 @@
 <template>
-    <div class="editor">
-        <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-            <div class="menubar">
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.bold() }"
-                        @click="commands.bold"
-                >
-                    <icon name="bold" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.italic() }"
-                        @click="commands.italic"
-                >
-                    <icon name="italic" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.strike() }"
-                        @click="commands.strike"
-                >
-                    <icon name="strike" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.underline() }"
-                        @click="commands.underline"
-                >
-                    <icon name="underline" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.code() }"
-                        @click="commands.code"
-                >
-                    <icon name="code" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.paragraph() }"
-                        @click="commands.paragraph"
-                >
-                    <icon name="paragraph" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-                        @click="commands.heading({ level: 1 })"
-                >
-                    H1
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-                        @click="commands.heading({ level: 2 })"
-                >
-                    H2
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-                        @click="commands.heading({ level: 3 })"
-                >
-                    H3
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.bullet_list() }"
-                        @click="commands.bullet_list"
-                >
-                    <icon name="ul" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.ordered_list() }"
-                        @click="commands.ordered_list"
-                >
-                    <icon name="ol" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.blockquote() }"
-                        @click="commands.blockquote"
-                >
-                    <icon name="quote" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        :class="{ 'is-active': isActive.code_block() }"
-                        @click="commands.code_block"
-                >
-                    <icon name="code" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        @click="commands.horizontal_rule"
-                >
-                    <icon name="hr" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        @click="commands.undo"
-                >
-                    <icon name="undo" />
-                </button>
-
-                <button
-                        class="menubar__button"
-                        @click="commands.redo"
-                >
-                    <icon name="redo" />
-                </button>
-
+    <div>
+        <base-header class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
+                     style="min-height: 600px; background-image: url(img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+            <!-- Mask -->
+            <span class="mask bg-gradient-success opacity-8"></span>
+            <!-- Header container -->
+            <div class="container-fluid d-flex align-items-center">
+                <div class="row">
+                    <div class="col-lg-7 col-md-10">
+                        <h1 class="display-2 text-white">Hello Jesse</h1>
+                        <p class="text-white mt-0 mb-5">This is your profile page. You can see the progress you've made with your work and manage your projects or assigned tasks</p>
+                        <a href="#!" class="btn btn-info">Edit profile</a>
+                    </div>
+                </div>
             </div>
-        </editor-menu-bar>
+        </base-header>
 
-        <editor-content class="editor__content" :editor="editor" />
+        <div class="container-fluid mt--7">
+            <card shadow type="secondary">
+                <div slot="header" class="bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">My account</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+                        </div>
+                    </div>
+                </div>
+                <template>
+                    <form @submit.prevent>
+
+                        <!-- Address -->
+                        <h6 class="heading-small text-muted mb-4">Contact information</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <base-input alternative=""
+                                                label="title"
+                                                placeholder="title"
+                                                input-classes="form-control-alternative"
+                                                v-model="model.address"
+                                    />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <base-input alternative=""
+                                                label="category"
+                                                placeholder="category"
+                                                input-classes="form-control-alternative"
+                                                v-model="model.city"
+                                    />
+                                </div>
+
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <!-- Description -->
+                        <h6 class="heading-small text-muted mb-4">content</h6>
+                        <div class="pl-lg-4">
+                            <div class="form-group">
+                                <base-input alternative="" label="content">
+                                    <editor v-model="model.content"/>
+                                    <viewer
+                                            :value="model.content"
+                                            height="500px"
+                                    />
+                                </base-input>
+                            </div>
+                        </div>
+                    </form>
+                </template>
+            </card>
+
+        </div>
     </div>
 </template>
-
 <script>
-    import Icon from 'Components/Icon'
-    import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
-    import {
-        Blockquote,
-        CodeBlock,
-        HardBreak,
-        Heading,
-        HorizontalRule,
-        OrderedList,
-        BulletList,
-        ListItem,
-        TodoItem,
-        TodoList,
-        Bold,
-        Code,
-        Italic,
-        Link,
-        Strike,
-        Underline,
-        History,
-    } from 'tiptap-extensions'
+    import 'tui-editor/dist/tui-editor.css'
+    import 'tui-editor/dist/tui-editor-contents.css'
+    import 'codemirror/lib/codemirror.css'
+    import { Editor, Viewer } from '@toast-ui/vue-editor'
+
+
     export default {
         components: {
-            EditorContent,
-            EditorMenuBar,
-            Icon,
+            'editor': Editor,
+            'viewer': Viewer
         },
+        name: 'user-profile',
         data() {
             return {
-                editor: new Editor({
-                    extensions: [
-                        new Blockquote(),
-                        new BulletList(),
-                        new CodeBlock(),
-                        new HardBreak(),
-                        new Heading({ levels: [1, 2, 3] }),
-                        new HorizontalRule(),
-                        new ListItem(),
-                        new OrderedList(),
-                        new TodoItem(),
-                        new TodoList(),
-                        new Link(),
-                        new Bold(),
-                        new Code(),
-                        new Italic(),
-                        new Strike(),
-                        new Underline(),
-                        new History(),
-                    ],
-                    content: `
-          <h2>
-            Hi there,
-          </h2>
-          <p>
-            this is a very <em>basic</em> example of tiptap.
-          </p>
-          <pre><code>body { display: none; }</code></pre>
-          <ul>
-            <li>
-              A regular list
-            </li>
-            <li>
-              With regular items
-            </li>
-          </ul>
-          <blockquote>
-            It's amazing 👏
-            <br />
-            – mom
-          </blockquote>
-        `,
-                }),
+                model: {
+                    username: '',
+                    email: '',
+                    firstName: '',
+                    lastName: '',
+                    address: '',
+                    city: '',
+                    country: '',
+                    zipCode: '',
+                    about: '',
+                    content: 'eeee'
+                }
             }
         },
-        beforeDestroy() {
-            this.editor.destroy()
-        },
-    }
+    };
 </script>
+<style></style>
