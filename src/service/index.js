@@ -34,6 +34,10 @@
             let api = getAxios();
             return api.get('/tags')
         },
+        getPosts: function (data) {
+            let api = getAxios();
+            return api.get(`/posts`, {params: data})
+        },
         savePost: function(data) {
             let api = getAxios();
             api.defaults.headers['Content-Type'] = 'application/json';

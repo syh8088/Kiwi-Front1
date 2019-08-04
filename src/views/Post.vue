@@ -147,9 +147,11 @@
                     country: '',
                     zipCode: '',
                     about: '',
-                }
+                },
+                postResponses: [],
             }
-        }
+        },
+
     };
 </script>
 
