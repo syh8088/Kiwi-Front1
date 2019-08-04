@@ -79,7 +79,7 @@
                                     <vue-tags-input
                                             :autocomplete-items="filteredTags"
                                             v-model="tag"
-                                            :tags="tags"
+                                            :tags="model.tags"
                                             @tags-changed="update"
                                     />
                                 </div>
@@ -129,9 +129,9 @@
                 model: {
                     postNo: 0,
                     title: '',
-                    tags: '',
+                    tags: [],
                     categoryNo: 0,
-                    content: 'eeee'
+                    content: ''
                 },
                 categoriesData: [],
                 subCategoriesData: [],
@@ -142,7 +142,7 @@
             }
         },
         watch: {
-            'tag': 'initTags',
+            'tag': 'initTags'
         },
         computed: {
             filteredTags() {
@@ -152,6 +152,11 @@
             },
         },
         created() {
+            this.model.postNo = Number(this.$route.query.postNo) || 0;
+
+            if(this.model.postNo) {
+                this.getPost();
+            }
 
             this.$api.getCategories().then(response => {
                 if(response.status === 200 || response.status === 204) {
@@ -168,19 +173,39 @@
 
         },
         methods: {
+            getPost() {
+                this.$api.getPost(this.model.postNo).then(response => {
+                    if(response.status === 200 || response.status === 204) {
+
+                        this.model.title = response.data.title;
+                        //this.model.tags = response.data.tags;
+                        this.model.categoryNo = response.data.category.categoryNo;
+                        this.model.content = response.data.content;
+
+                        this.model.tags = response.data.tags.map(a => {
+                            return { text: a.name };
+                        });
+
+                        console.log(response.data);
+                    }
+
+                }).catch(e => {
+                    console.log(e);
+                });
+            },
             savePost() {
                 console.log(this.model.title);
                 console.log(this.model.categoryNo);
                 console.log(this.model.postNo);
                 console.log(this.model.content);
-                console.log(this.tags);
+                console.log(this.model.tags);
 
-                if(!this.model.title || !this.model.content || this.model.categoryNo === 0 || this.tags.length <= 0) {
+                if(!this.model.title || !this.model.content || this.model.categoryNo === 0 || this.model.tags.length <= 0) {
                     alert("유효성 검사 ERROR");
                     return false;
                 }
 
-                this.model.tags = this.tags.map(a => {
+                this.model.tags = this.model.tags.map(a => {
                     return { name: a.text };
                 });
 
@@ -204,7 +229,7 @@
             },
             update(newTags) {
                 this.autocompleteItems = [];
-                this.tags = newTags;
+                this.model.tags = newTags;
             },
             initTags() {
 

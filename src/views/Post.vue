@@ -147,8 +147,7 @@
                     country: '',
                     zipCode: '',
                     about: '',
-                },
-                postResponses: [],
+                }
             }
         },
 

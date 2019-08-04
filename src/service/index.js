@@ -38,6 +38,10 @@
             let api = getAxios();
             return api.get(`/posts`, {params: data})
         },
+        getPost: function (postNo) {
+            let api = getAxios();
+            return api.get(`/posts/${postNo}`)
+        },
         savePost: function(data) {
             let api = getAxios();
             api.defaults.headers['Content-Type'] = 'application/json';
