@@ -30,5 +30,14 @@
             api.defaults.headers['Content-Type'] = 'application/json';
             return api.post('/categories', data)
         },
+        getTags: function () {
+            let api = getAxios();
+            return api.get('/tags')
+        },
+        savePost: function(data) {
+            let api = getAxios();
+            api.defaults.headers['Content-Type'] = 'application/json';
+            return api.post('/posts', data)
+        },
     };
 })();
