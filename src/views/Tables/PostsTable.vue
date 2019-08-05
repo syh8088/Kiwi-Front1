@@ -109,7 +109,7 @@
     </div>
 
     <div class="card-footer d-flex justify-content-end" :class="type === 'dark' ? 'bg-transparent': ''">
-      <base-pagination total="30" v-on:input="changePage"></base-pagination>
+      <base-pagination :total="totalSize" v-on:input="changePage"></base-pagination>
     </div>
 
   </div>

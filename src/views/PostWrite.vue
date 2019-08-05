@@ -94,6 +94,13 @@
                                     <editor
                                             previewStyle="vertical"
                                             v-model="model.content"
+                                            :options="editorOptions"
+                                            @load="onEditorLoad"
+                                            @focus="onEditorFocus"
+                                            @blur="onEditorBlur"
+                                            @change="onEditorChange"
+                                            @stateChange="onEditorStateChange"
+                                            @
                                     />
                                 </base-input>
                             </div>
@@ -115,8 +122,6 @@
     import 'codemirror/lib/codemirror.css'
     import { Editor } from '@toast-ui/vue-editor'
     import VueTagsInput from '@johmun/vue-tags-input'
-    //import BaseTransition from "vue2-transitions/src/mixins/baseTransition";
-
 
     export default {
         components: {
@@ -126,6 +131,9 @@
         name: 'post-write',
         data() {
             return {
+                editorOptions: {
+                    hideModeSwitch: true
+                },
                 model: {
                     postNo: 0,
                     title: '',
@@ -173,6 +181,36 @@
 
         },
         methods: {
+            scroll() {
+                this.$refs.tuiEditor.invoke('scrollTop', 10);
+
+            },
+            moveTop() {
+                this.$refs.tuiEditor.invoke('moveCursorToStart');
+            },
+            getHtml() {
+                let html = this.$refs.tuiEditor.invoke('getHtml');
+                console.log(html);
+            },
+            onEditorLoad() {
+                // implement your code
+
+            },
+            onEditorFocus() {
+                // implement your code
+            },
+            onEditorBlur() {
+                // implement your code
+            },
+            onEditorChange(el) {
+                // implement your code
+                console.log(el);
+
+            },
+            onEditorStateChange() {
+                // implement your code
+
+            },
             getPost() {
                 this.$api.getPost(this.model.postNo).then(response => {
                     if(response.status === 200 || response.status === 204) {
