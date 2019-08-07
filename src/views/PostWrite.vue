@@ -100,7 +100,7 @@
                                             @blur="onEditorBlur"
                                             @change="onEditorChange"
                                             @stateChange="onEditorStateChange"
-                                            @
+                                            ref="tuiEditor"
                                     />
                                 </base-input>
                             </div>
@@ -190,7 +190,19 @@
             },
             getHtml() {
                 let html = this.$refs.tuiEditor.invoke('getHtml');
-                console.log(html);
+
+                let m;
+                let urls = [];
+                let rex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/g;
+
+                while ( m = rex.exec( html ) ) {
+                    urls.push( m[1] );
+                }
+
+             //   console.log( html.match(/(src.*)(?=\salt)/g));
+                console.log( urls );
+
+
             },
             onEditorLoad() {
                 // implement your code
@@ -201,15 +213,35 @@
             },
             onEditorBlur() {
                 // implement your code
+
             },
             onEditorChange(el) {
                 // implement your code
                 console.log(el);
-
+                this.getHtml();
             },
             onEditorStateChange() {
                 // implement your code
 
+            },
+            binaryStringToArrayBuffer(binary) {
+                let length = binary.length;
+                let buf = new ArrayBuffer(length);
+                let arr = new Uint8Array(buf);
+                for(let i=0; i<length; i++) {
+                    arr[i] = binary.charCodeAt(i);
+                }
+                return buf;
+            },
+            base64StringToBlob(base64) {
+                let type = base64.match(/data:([^;]+)/)[1];
+                base64 = base64.replace(/^[^,]+,/g, '');
+                let options = {};
+                if (type) {
+                    options.type = type;
+                }
+                let binaryArrayBuffer = [ this.binaryStringToArrayBuffer(window.atob(base64)) ];
+                return new Blob(binaryArrayBuffer, options);
             },
             getPost() {
                 this.$api.getPost(this.model.postNo).then(response => {
