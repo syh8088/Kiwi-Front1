@@ -47,5 +47,12 @@
             api.defaults.headers['Content-Type'] = 'application/json';
             return api.post('/posts', data)
         },
+        saveImage: function(data) {
+            let api = getAxios();
+            let formData = new FormData();
+            formData.append("multipartFile", data);
+            api.defaults.headers['Content-Type'] = 'multipart/form-data';
+            return api.post('/images', formData)
+        },
     };
 })();
