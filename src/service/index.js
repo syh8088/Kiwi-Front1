@@ -4,7 +4,7 @@
 
     function getAxios() {
         return Axios.create({
-            baseURL: 'http://localhost:8082',
+            baseURL: 'http://localhost:5187',
             withCredentials: false,
             headers: {
                 'Accept': 'application/json',
